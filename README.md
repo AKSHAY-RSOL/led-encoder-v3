@@ -46,7 +46,7 @@ This project is built with React, TypeScript, and Vite.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/lumina-choreographer.git
+   git clone https://github.com/AKSHAY-RSOL/lumina-choreographer.git
    cd lumina-choreographer
    ```
 
