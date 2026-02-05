@@ -49,9 +49,8 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   const endTime = selectedCue.startTime + selectedCue.duration;
 
   const handleEndTimeChange = (newEnd: number) => {
-      // Ensure end time isn't before start time (allowing 0 duration)
-      const validEnd = Math.max(selectedCue.startTime, newEnd);
-      const newDuration = validEnd - selectedCue.startTime;
+      // Allow negative duration (removed Math.max check)
+      const newDuration = newEnd - selectedCue.startTime;
       onUpdateCue(selectedCue.id, { duration: newDuration });
   };
 
@@ -269,7 +268,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <input 
                     type="number" 
                     value={Math.round(selectedCue.duration)}
-                    onChange={(e) => onUpdateCue(selectedCue.id, { duration: Math.max(0, parseInt(e.target.value)) })}
+                    onChange={(e) => onUpdateCue(selectedCue.id, { duration: parseInt(e.target.value) })}
                     className="w-full bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white focus:border-cyan-500 outline-none"
                 />
             </div>

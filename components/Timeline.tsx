@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { Cue, SuitConfig } from '../types';
-import { Play, Pause, Rewind, Plus, Music, ChevronRight, ChevronDown, Layers, Gauge, SkipForward } from 'lucide-react';
+import { Play, Pause, Rewind, Plus, Music, ChevronRight, ChevronDown, Layers, Gauge, SkipForward, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface TimelineProps {
   cues: Cue[];
@@ -19,6 +19,7 @@ interface TimelineProps {
   onPlaybackRateChange: (rate: number) => void;
   nudgeStep: number;
   onNudgeStepChange: (step: number) => void;
+  onZoomChange: (zoom: number) => void;
 }
 
 // Separate component for the heavy track logic.
@@ -271,7 +272,8 @@ const Timeline: React.FC<TimelineProps> = ({
   playbackRate,
   onPlaybackRateChange,
   nudgeStep,
-  onNudgeStepChange
+  onNudgeStepChange,
+  onZoomChange
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [expandedSuits, setExpandedSuits] = useState<Set<number>>(new Set());
@@ -322,6 +324,13 @@ const Timeline: React.FC<TimelineProps> = ({
       // Update the active step for keyboard use
       onNudgeStepChange(Math.abs(amount));
   }
+
+  const handleZoom = (direction: 'in' | 'out') => {
+      const step = 10;
+      let newZoom = direction === 'in' ? zoom + step : zoom - step;
+      newZoom = Math.max(10, Math.min(newZoom, 500)); // Clamp between 10px/s and 500px/s
+      onZoomChange(newZoom);
+  };
 
   const getNudgeButtonClass = (amount: number) => {
       const isActive = nudgeStep === amount;
@@ -421,6 +430,25 @@ const Timeline: React.FC<TimelineProps> = ({
                     ))}
                 </div>
             )}
+        </div>
+
+        {/* Zoom Controls */}
+        <div className="flex items-center gap-1 border-l border-neutral-700 pl-3 ml-2">
+            <button 
+                onClick={() => handleZoom('out')} 
+                className="text-neutral-400 hover:text-white p-1 rounded hover:bg-neutral-800 transition-colors"
+                title="Zoom Out"
+            >
+                <ZoomOut size={16} />
+            </button>
+            <span className="text-[10px] text-neutral-500 w-8 text-center select-none">{zoom}px</span>
+            <button 
+                onClick={() => handleZoom('in')} 
+                className="text-neutral-400 hover:text-white p-1 rounded hover:bg-neutral-800 transition-colors"
+                title="Zoom In"
+            >
+                <ZoomIn size={16} />
+            </button>
         </div>
         
         {/* Manual Time Entry */}

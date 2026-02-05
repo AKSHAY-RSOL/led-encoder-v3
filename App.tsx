@@ -13,7 +13,7 @@ const App: React.FC = () => {
   // --- State ---
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [duration, setDuration] = useState(30000); // 30 seconds default
+  const [duration, setDuration] = useState(240000); // 4 minutes default
   const [zoom, setZoom] = useState(50); // pixels per second
   const [playbackRate, setPlaybackRate] = useState(1); // 1.0 = Normal speed
   const [nudgeStep, setNudgeStep] = useState(100); // Default 100ms step for arrows
@@ -307,6 +307,7 @@ const App: React.FC = () => {
             onPlaybackRateChange={setPlaybackRate}
             nudgeStep={nudgeStep}
             onNudgeStepChange={setNudgeStep}
+            onZoomChange={setZoom}
          />
       </div>
 

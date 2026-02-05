@@ -630,17 +630,17 @@ uint32_t hslToRgb(float h, float s, float l) {
     if (s == 0) { r = g = b = l; } 
     else {
         auto hue2rgb = [](float p, float q, float t) {
-            if (t < 0) t += 1; if (t > 1) t -= 1;
-            if (t < 1.0/6.0) return p + (q - p) * 6.0 * t;
-            if (t < 1.0/2.0) return q;
-            if (t < 2.0/3.0) return p + (q - p) * (2.0/3.0 - t) * 6.0;
+            if (t < 0.0f) t += 1.0f; if (t > 1.0f) t -= 1.0f;
+            if (t < 1.0f/6.0f) return p + (q - p) * 6.0f * t;
+            if (t < 1.0f/2.0f) return q;
+            if (t < 2.0f/3.0f) return p + (q - p) * (2.0f/3.0f - t) * 6.0f;
             return p;
         };
-        float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        float p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1.0/3.0);
+        float q = l < 0.5f ? l * (1.0f + s) : l + s - l * s;
+        float p = 2.0f * l - q;
+        r = hue2rgb(p, q, h + 1.0f/3.0f);
         g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1.0/3.0);
+        b = hue2rgb(p, q, h - 1.0f/3.0f);
     }
     return ((uint8_t)(r * 255) << 16) | ((uint8_t)(g * 255) << 8) | (uint8_t)(b * 255);
 }
