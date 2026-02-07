@@ -9,31 +9,64 @@ export const COLORS = {
   success: '#10b981',
 };
 
-// Updated logical LED distribution based on "Wearer's Perspective"
-// Total LEDs: 541
-export const DEFAULT_SUITS: SuitConfig[] = Array.from({ length: 5 }, (_, i) => ({
-  id: i,
-  name: `Dancer ${i + 1}`,
-  ledCount: 541, 
-  parts: {
-    rTorso: 33,      // 0-32
-    rPocket: 36,     // 33-68
-    rArmDown: 28,    // 69-96
-    rFingers: 6,     // 97-102
-    rArmUpper: 40,   // 103-142
-    face: 41,        // 143-183
-    lArmUp: 39,      // 184-222
-    lFingers: 6,     // 223-228
-    lArmDown: 30,    // 229-258
-    lPocket: 33,     // 259-291
-    lTorso: 39,      // 292-330
-    lLegOuter: 51,   // 331-381
-    lLegInner: 41,   // 382-422
-    rLegInner: 41,   // 423-463
-    rLegOuter: 64,   // 464-527
-    lLegOuterExt: 13 // 528-540
+// Updated logical LED distribution based on user specifications
+export const DEFAULT_SUITS: SuitConfig[] = [
+  {
+    id: 0,
+    name: "Dancer 1",
+    ledCount: 563,
+    parts: {
+      rTorso: 32, rPocket: 32, rArmDown: 32, rFingers: 6, rArmUpper: 42,
+      face: 42, lArmUp: 46, lFingers: 6, lArmDown: 33, lPocket: 34,
+      lTorso: 34, lLegOuter: 54, lLegInner: 50, rLegInner: 42, rLegOuter: 67,
+      lLegOuterExt: 11
+    }
+  },
+  {
+    id: 1,
+    name: "Dancer 2",
+    ledCount: 545,
+    parts: {
+      rTorso: 32, rPocket: 39, rArmDown: 32, rFingers: 6, rArmUpper: 43,
+      face: 44, lArmUp: 42, lFingers: 6, lArmDown: 33, lPocket: 37,
+      lTorso: 30, lLegOuter: 51, lLegInner: 38, rLegInner: 39, rLegOuter: 63,
+      lLegOuterExt: 13
+    }
+  },
+  {
+    id: 2,
+    name: "Dancer 3",
+    ledCount: 541,
+    parts: {
+      rTorso: 33, rPocket: 36, rArmDown: 28, rFingers: 6, rArmUpper: 40,
+      face: 41, lArmUp: 39, lFingers: 6, lArmDown: 30, lPocket: 33,
+      lTorso: 39, lLegOuter: 51, lLegInner: 41, rLegInner: 41, rLegOuter: 64,
+      lLegOuterExt: 13
+    }
+  },
+  {
+    id: 3,
+    name: "Dancer 4",
+    ledCount: 569,
+    parts: {
+      rTorso: 32, rPocket: 37, rArmDown: 28, rFingers: 6, rArmUpper: 43,
+      face: 45, lArmUp: 41, lFingers: 6, lArmDown: 31, lPocket: 36,
+      lTorso: 36, lLegOuter: 57, lLegInner: 48, rLegInner: 37, rLegOuter: 73,
+      lLegOuterExt: 13
+    }
+  },
+  {
+    id: 4,
+    name: "Dancer 5",
+    ledCount: 574,
+    parts: {
+      rTorso: 32, rPocket: 34, rArmDown: 33, rFingers: 6, rArmUpper: 46,
+      face: 41, lArmUp: 43, lFingers: 6, lArmDown: 32, lPocket: 32,
+      lTorso: 32, lLegOuter: 54, lLegInner: 45, rLegInner: 50, rLegOuter: 73,
+      lLegOuterExt: 15
+    }
   }
-}));
+];
 
 export const SAMPLE_CUES = [
   {
@@ -44,7 +77,7 @@ export const SAMPLE_CUES = [
     type: 'solid',
     color: '#ff0000',
     ledRangeStart: 0,
-    ledRangeEnd: 541,
+    ledRangeEnd: 563,
   },
   {
     id: '2',
@@ -56,6 +89,6 @@ export const SAMPLE_CUES = [
     secondaryColor: '#000000',
     speed: 5,
     ledRangeStart: 143, // Face start
-    ledRangeEnd: 183,   // Face end
+    ledRangeEnd: 183,   // Face end (143 + 41 - 1)
   },
 ] as const;

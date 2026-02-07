@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { SuitConfig, Cue, LEDPosition } from '../types';
 import { calculateLedColor, getActiveCuesForFrame, intToHex, prepareCuesForRender } from '../services/ledEngine';
@@ -115,7 +114,7 @@ const Visualizer: React.FC<VisualizerProps> = ({
         // 1. R Torso
         const zipperRBottom = { x: hipR.x + 8, y: hipR.y };
         const zipperRTop = { x: shoulderR.x + 20, y: shoulderY };
-        addStrip('rTorso', 33, generatePoints(33, t => interpolate(zipperRBottom, zipperRTop, t), idx, 'rTorso'));
+        addStrip('rTorso', suit.parts.rTorso, generatePoints(suit.parts.rTorso, t => interpolate(zipperRBottom, zipperRTop, t), idx, 'rTorso'));
 
         // 2. R Pocket (Rect)
         const rPocketCenter = { x: shoulderR.x + 22, y: shoulderY + 35 };
@@ -134,7 +133,7 @@ const Visualizer: React.FC<VisualizerProps> = ({
             if (d<=pocketSize*3) return interpolate(br,bl,(d-pocketSize*2)/pocketSize);
             return interpolate(bl,tl,(d-pocketSize*3)/pocketSize);
         }
-        addStrip('rPocket', 36, generatePoints(36, getRectPos, idx, 'rPocket'), true);
+        addStrip('rPocket', suit.parts.rPocket, generatePoints(suit.parts.rPocket, getRectPos, idx, 'rPocket'), true);
 
         // 3. R Arm Down (Poly)
         const rArmPts = [shoulderR, elbowR, wristR];
@@ -142,10 +141,10 @@ const Visualizer: React.FC<VisualizerProps> = ({
             if (t <= 0.5) return interpolate(pts[0], pts[1], t*2);
             return interpolate(pts[1], pts[2], (t-0.5)*2);
         };
-        addStrip('rArmDown', 28, generatePoints(28, t => getPolyPos(t, rArmPts), idx, 'rArmDown'));
+        addStrip('rArmDown', suit.parts.rArmDown, generatePoints(suit.parts.rArmDown, t => getPolyPos(t, rArmPts), idx, 'rArmDown'));
 
         // 4. R Fingers (Loop)
-        addStrip('rFingers', 6, generatePoints(6, t => {
+        addStrip('rFingers', suit.parts.rFingers, generatePoints(suit.parts.rFingers, t => {
             const ang = t * Math.PI * 2;
             return { x: wristR.x + Math.cos(ang)*5, y: wristR.y + Math.sin(ang)*5 };
         }, idx, 'rFingers'), true);
@@ -154,11 +153,11 @@ const Visualizer: React.FC<VisualizerProps> = ({
         const wristRInner = { x: wristR.x + 6, y: wristR.y + 4 };
         const elbowRInner = { x: elbowR.x + 6, y: elbowR.y + 4 };
         const armpitR = { x: shoulderR.x + 5, y: shoulderY + 15 };
-        addStrip('rArmUpper', 40, generatePoints(40, t => getPolyPos(t, [wristRInner, elbowRInner, armpitR]), idx, 'rArmUpper'));
+        addStrip('rArmUpper', suit.parts.rArmUpper, generatePoints(suit.parts.rArmUpper, t => getPolyPos(t, [wristRInner, elbowRInner, armpitR]), idx, 'rArmUpper'));
 
         // 6. Face
         const headCenter = { x: center.x, y: shoulderY - 25 };
-        addStrip('face', 41, generatePoints(41, t => {
+        addStrip('face', suit.parts.face, generatePoints(suit.parts.face, t => {
             const startAng = Math.PI/2;
             const endAng = -Math.PI*1.5;
             const ang = startAng + (endAng - startAng) * t;
@@ -166,10 +165,10 @@ const Visualizer: React.FC<VisualizerProps> = ({
         }, idx, 'face'), true);
 
         // 7. L Arm Up (Poly)
-        addStrip('lArmUp', 39, generatePoints(39, t => getPolyPos(t, [shoulderL, elbowL, wristL]), idx, 'lArmUp'));
+        addStrip('lArmUp', suit.parts.lArmUp, generatePoints(suit.parts.lArmUp, t => getPolyPos(t, [shoulderL, elbowL, wristL]), idx, 'lArmUp'));
 
         // 8. L Fingers
-        addStrip('lFingers', 6, generatePoints(6, t => {
+        addStrip('lFingers', suit.parts.lFingers, generatePoints(suit.parts.lFingers, t => {
              const ang = t * Math.PI * 2;
             return { x: wristL.x + Math.cos(ang)*5, y: wristL.y + Math.sin(ang)*5 };
         }, idx, 'lFingers'), true);
@@ -178,7 +177,7 @@ const Visualizer: React.FC<VisualizerProps> = ({
         const wristLInner = { x: wristL.x - 6, y: wristL.y + 4 };
         const elbowLInner = { x: elbowL.x - 6, y: elbowL.y + 4 };
         const armpitL = { x: shoulderL.x - 5, y: shoulderY + 15 };
-        addStrip('lArmDown', 30, generatePoints(30, t => getPolyPos(t, [wristLInner, elbowLInner, armpitL]), idx, 'lArmDown'));
+        addStrip('lArmDown', suit.parts.lArmDown, generatePoints(suit.parts.lArmDown, t => getPolyPos(t, [wristLInner, elbowLInner, armpitL]), idx, 'lArmDown'));
 
         // 10. L Pocket
         const lPocketCenter = { x: shoulderL.x - 22, y: shoulderY + 35 };
@@ -193,32 +192,32 @@ const Visualizer: React.FC<VisualizerProps> = ({
              if (d<=pocketSize*3) return interpolate(brL,blL,(d-pocketSize*2)/pocketSize);
              return interpolate(blL,tlL,(d-pocketSize*3)/pocketSize);
         }
-        addStrip('lPocket', 33, generatePoints(33, getRectPosL, idx, 'lPocket'), true);
+        addStrip('lPocket', suit.parts.lPocket, generatePoints(suit.parts.lPocket, getRectPosL, idx, 'lPocket'), true);
 
         // 11. L Torso
         const zipperLTop = { x: shoulderL.x - 20, y: shoulderY };
         const zipperLBottom = { x: hipL.x - 8, y: hipL.y };
-        addStrip('lTorso', 39, generatePoints(39, t => interpolate(zipperLTop, zipperLBottom, t), idx, 'lTorso'));
+        addStrip('lTorso', suit.parts.lTorso, generatePoints(suit.parts.lTorso, t => interpolate(zipperLTop, zipperLBottom, t), idx, 'lTorso'));
 
         // 12. L Leg Outer
-        addStrip('lLegOuter', 51, generatePoints(51, t => getPolyPos(t, [hipL, kneeL, ankleL]), idx, 'lLegOuter'));
+        addStrip('lLegOuter', suit.parts.lLegOuter, generatePoints(suit.parts.lLegOuter, t => getPolyPos(t, [hipL, kneeL, ankleL]), idx, 'lLegOuter'));
 
         // 13. L Leg Inner
         const crotch = { x: center.x, y: hipY + 15 };
         const ankleLInner = { x: ankleL.x - 8, y: ankleL.y };
         const kneeLInner = { x: kneeL.x - 8, y: kneeL.y };
-        addStrip('lLegInner', 41, generatePoints(41, t => getPolyPos(t, [ankleLInner, kneeLInner, crotch]), idx, 'lLegInner'));
+        addStrip('lLegInner', suit.parts.lLegInner, generatePoints(suit.parts.lLegInner, t => getPolyPos(t, [ankleLInner, kneeLInner, crotch]), idx, 'lLegInner'));
 
         // 14. R Leg Inner
         const ankleRInner = { x: ankleR.x + 8, y: ankleR.y };
         const kneeRInner = { x: kneeR.x + 8, y: kneeR.y };
-        addStrip('rLegInner', 41, generatePoints(41, t => getPolyPos(t, [crotch, kneeRInner, ankleRInner]), idx, 'rLegInner'));
+        addStrip('rLegInner', suit.parts.rLegInner, generatePoints(suit.parts.rLegInner, t => getPolyPos(t, [crotch, kneeRInner, ankleRInner]), idx, 'rLegInner'));
 
         // 15. R Leg Outer
-        addStrip('rLegOuter', 64, generatePoints(64, t => getPolyPos(t, [ankleR, kneeR, hipR]), idx, 'rLegOuter'));
+        addStrip('rLegOuter', suit.parts.rLegOuter, generatePoints(suit.parts.rLegOuter, t => getPolyPos(t, [ankleR, kneeR, hipR]), idx, 'rLegOuter'));
 
         // 16. L Leg Outer Ext
-        addStrip('lLegOuterExt', 13, generatePoints(13, t => interpolate({x: ankleL.x, y: ankleL.y - 10}, ankleL, t), idx, 'lLegOuterExt'));
+        addStrip('lLegOuterExt', suit.parts.lLegOuterExt, generatePoints(suit.parts.lLegOuterExt, t => interpolate({x: ankleL.x, y: ankleL.y - 10}, ankleL, t), idx, 'lLegOuterExt'));
 
         geometries.push({
             suitId: suit.id,
